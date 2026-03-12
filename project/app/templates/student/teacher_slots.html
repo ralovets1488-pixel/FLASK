@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Слоты преподавателя{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">📅 Свободные слоты: {{ teacher.username }}</h1>
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('student.calendar', teacher_id=teacher.id) }}" class="btn btn-info">
+                <i class="bi bi-calendar-week me-1"></i> Календарь
+            </a>
+            <a href="{{ url_for('student.teachers_list') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i> Назад к списку
+            </a>
+        </div>
+    </div>
+
+    {% if profile %}
+        <div class="card mb-4">
+            <div class="card-body">
+                {% if profile.specialization %}
+                    <p class="text-primary fw-medium mb-2">
+                        <i class="bi bi-mortarboard me-2"></i>{{ profile.specialization }}
+                    </p>
+                {% endif %}
+                {% if profile.bio %}
+                    <p class="card-text">{{ profile.bio }}</p>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+    {% if slots and slots|length > 0 %}
+        <div class="row g-3">
+            {% for slot in slots %}
+                <div class="col-md-4">
+                    <div class="card h-100 border-primary">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ slot.start_time.strftime('%d.%m.%Y') }}</h5>
+                            <p class="display-6 fw-bold mb-3">{{ slot.start_time.strftime('%H:%M') }}</p>
+                            <a href="{{ url_for('student.book_slot', slot_id=slot.id) }}"
+                               class="btn btn-primary mt-auto w-100">
+                                <i class="bi bi-calendar-check me-2"></i>Записаться
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <div class="display-1 text-muted mb-4">📅</div>
+            <h3 class="mb-3">Нет свободных слотов</h3>
+            <p class="lead text-muted mb-4">У преподавателя пока нет доступных временных слотов на ближайшие 2 недели</p>
+            <a href="{{ url_for('student.teachers_list') }}" class="btn btn-outline-primary btn-lg">
+                <i class="bi bi-people me-2"></i>Выбрать другого преподавателя
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
