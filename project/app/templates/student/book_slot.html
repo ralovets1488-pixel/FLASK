@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Запись на консультацию{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0 d-flex align-items-center">
+                        <i class="bi bi-calendar-check me-2"></i>
+                        Запись на консультацию
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <!-- Информация о слоте -->
+                    <div class="alert alert-primary mb-4">
+                        <h5 class="mb-3">Информация о консультации</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <strong>Преподаватель:</strong><br>
+                                {{ teacher.username }}
+                                {% if teacher.teacher_profile and teacher.teacher_profile.specialization %}
+                                    <span class="badge bg-light text-dark ms-2">{{ teacher.teacher_profile.specialization }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <strong>Дата и время:</strong><br>
+                                {{ slot.start_time.strftime('%d.%m.%Y') }} в {{ slot.start_time.strftime('%H:%M') }}
+                                <span class="text-muted ms-1">(1 час)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Форма записи -->
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+
+                        <div class="mb-3">
+                            {{ form.topic.label(class="form-label fw-bold") }}
+                            {{ form.topic(class="form-control", placeholder="Например: Помощь с решением задачи по математике", required="required") }}
+                            {% for error in form.topic.errors %}
+                                <div class="text-danger mt-1">{{ error }}</div>
+                            {% endfor %}
+                            <div class="form-text">Кратко опишите тему, по которой нужна помощь</div>
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.additional_info.label(class="form-label fw-bold") }}
+                            {{ form.additional_info(class="form-control", rows=3, placeholder="Дополнительные детали, номер задачи, ссылки и т.д.") }}
+                            <div class="form-text">Необязательно, но поможет преподавателю подготовиться</div>
+                        </div>
+
+                        <div class="mb-4">
+                            {{ form.file.label(class="form-label fw-bold") }}
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">
+                                    <i class="bi bi-paperclip"></i>
+                                </span>
+                                {{ form.file(class="form-control") }}
+                            </div>
+                            <div class="form-text">Можно прикрепить файл с условием задачи, скриншотом или материалами (до 16 МБ)</div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-block">
+                            <button type="submit" class="btn btn-success btn-lg px-5 me-md-2 mb-2 mb-md-0">
+                                <i class="bi bi-check-circle me-2"></i>Подтвердить запись
+                            </button>
+                            <a href="{{ url_for('student.teacher_slots', teacher_id=teacher.id) }}"
+                               class="btn btn-outline-secondary btn-lg px-5">
+                                <i class="bi bi-arrow-left me-2"></i>Отмена
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="alert alert-warning mt-4">
+                <h5 class="alert-heading mb-2"><i class="bi bi-exclamation-triangle me-2"></i>Важно!</h5>
+                <ul class="mb-0">
+                    <li>Вы можете отменить запись до начала консультации в своём кабинете</li>
+                    <li>Нельзя записаться на два слота в одно и то же время</li>
+                    <li>Приходите за 5 минут до начала консультации</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

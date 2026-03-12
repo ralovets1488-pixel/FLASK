@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Редактировать пользователя{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Редактировать пользователя: {{ user.username }}</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+
+                        <div class="mb-3">
+                            <label class="form-label">Роль</label>
+                            {{ form.role(class="form-select") }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Статус</label>
+                            {{ form.is_active(class="form-select") }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Сохранить изменения</button>
+                    </form>
+
+                    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary mt-3 w-100">
+                        ← Назад в админ панель
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

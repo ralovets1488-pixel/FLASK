@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Кабинет преподавателя{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2 mb-0">Моё расписание</h1>
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('teacher.calendar') }}" class="btn btn-info">
+                <i class="bi bi-calendar-week me-1"></i> Календарь
+            </a>
+            <a href="{{ url_for('teacher.create_slot') }}" class="btn btn-success">
+                <i class="bi bi-plus-circle me-1"></i> Создать слот
+            </a>
+        </div>
+    </div>
+        <a href="{{ url_for('teacher.create_slot') }}" class="btn btn-success">
+            <i class="bi bi-plus-circle me-1"></i> Создать слот
+        </a>
+    </div>
+
+    <!-- Слоты на текущую неделю -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Слоты на текущую неделю</h5>
+        </div>
+        <div class="card-body">
+            {% if slots and slots|length > 0 %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Дата и время</th>
+                                <th>Статус</th>
+                                <th>Студент</th>
+                                <th>Тема</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for slot in slots %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ slot.start_time.strftime('%d.%m.%Y') }}</strong><br>
+                                        <span class="badge bg-secondary">{{ slot.start_time.strftime('%H:%M') }}–{{ (slot.start_time.hour + 1) }}:00</span>
+                                    </td>
+                                    <td>
+                                        {% set appointment = slot.appointments|first %}
+                                        {% if appointment %}
+                                            <span class="badge bg-success">Занят</span>
+                                        {% else %}
+                                            <span class="badge bg-warning text-dark">Свободен</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if appointment %}
+                                            {{ appointment.student.username }}
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if appointment %}
+                                            {{ appointment.topic[:30] }}{% if appointment.topic|length > 30 %}...{% endif %}
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if not appointment %}
+                                            <form method="POST" action="{{ url_for('teacher.delete_slot', slot_id=slot.id) }}" class="d-inline" onsubmit="return confirm('Удалить слот? Слоты с записями нельзя удалить.')">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger py-0 px-2">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-4">
+                    <div class="display-4 text-muted mb-3">📅</div>
+                    <p class="text-muted mb-0">Нет слотов на текущую неделю</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Быстрое создание слота -->
+    <div class="card">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">Быстрое создание слота</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('teacher.create_slot') }}" class="row g-3">
+                {{ form.hidden_tag() }}
+                <div class="col-md-6">
+                    <label class="form-label">Дата и время</label>
+                    {{ form.start_time(class="form-control", required="required") }}
+                </div>
+                <div class="col-md-6 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-calendar-plus me-1"></i> Создать слот
+                    </button>
+                </div>
+            </form>
+            <div class="form-text mt-2">
+                Слот длится 1 час и должен начинаться с 00 минут (например, 14:00–14:59)
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
