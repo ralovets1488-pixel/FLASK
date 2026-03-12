@@ -1,0 +1,16 @@
+<!doctype html>
+<title>Создание пользователя</title>
+<h2>Создать нового пользователя</h2>
+<form method="POST">
+    {{ form.csrf_token }}
+    {{ form.username.label }} {{ form.username() }}<br>
+    {{ form.password.label }} {{ form.password() }}<br>
+    {{ form.confirm.label }} {{ form.confirm() }}<br>
+    {{ form.submit() }}
+</form>
+<a href="{{ url_for('logout') }}">Выйти</a>
+{% with messages = get_flashed_messages() %}
+  {% for msg in messages %}
+    <p style="color:green;">{{ msg }}</p>
+  {% endfor %}
+{% endwith %}

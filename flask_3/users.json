@@ -1,0 +1,12 @@
+{
+    "admin": {
+        "password": "scrypt:32768:8:1$Sxsqjp2WgzH3085E$b90d30174fd60a6b3c37b3b3772bf384f463391a34746b7f0fd983fd07cb2df94b872d89b617cda9a4aa61248589a4e5e2690b67e97a9d8987f5fe29ead243f8",
+        "registered": "2025-06-05T00:00:00",
+        "last_login": "2025-06-05T14:12:55.774778"
+    },
+    "sashacrut": {
+        "password": "scrypt:32768:8:1$BqyQWgTcK3Q1Z4D7$e8f5b7cd94d5d8a379f2a6183b32e0932314e9d9715a1204d98302cff34cb3fbd86b8ece38f1afebaffe3cbe8d09e7e086d6a2478f82c59156fd540dd2f85e26",
+        "registered": "2025-06-05T14:12:45.676594",
+        "last_login": null
+    }
+}
