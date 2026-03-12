@@ -1,0 +1,14 @@
+<!doctype html>
+<title>Вход</title>
+<h2>Вход администратора</h2>
+<form method="POST">
+    {{ form.csrf_token }}
+    {{ form.username.label }} {{ form.username() }}<br>
+    {{ form.password.label }} {{ form.password() }}<br>
+    {{ form.submit() }}
+</form>
+{% with messages = get_flashed_messages() %}
+  {% for msg in messages %}
+    <p style="color:red;">{{ msg }}</p>
+  {% endfor %}
+{% endwith %}
